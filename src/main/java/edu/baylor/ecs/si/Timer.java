@@ -27,22 +27,23 @@ public class Timer {
 	private static void method(long time) throws InterruptedException {
 		Thread.sleep(time);
 	}
-	
+
 	public static long timeMe(long timeToWait) throws TimerException {
-		Long timeNow = null;
+		Long timeNow = System.currentTimeMillis();
 		try {
-		  if (timeToWait < 0) {
-			  throw new TimerException("Cannot be less than zero");
-		  }
-	      timeNow = System.currentTimeMillis();
-		  method(timeToWait);
-			
+			if (timeToWait < 0) {
+				throw new TimerException("Cannot be less than zero");
+			}
+			method(timeToWait);
+
 		} catch (InterruptedException e) {
 			logger.severe("InterruptedException rised");
 			throw new TimerException("Sleep exception", e);
 		} finally {
-			logger.info("Calling took: "+ (System.currentTimeMillis() - timeNow));
-			logger.info("* should take: "+ timeToWait);
+			if (timeNow != null) {
+				logger.info("Calling took: " + (System.currentTimeMillis() - timeNow));
+				logger.info("* should take: " + timeToWait);
+			}
 		}
 		return timeNow;
 	}
